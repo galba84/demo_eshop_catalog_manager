@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Products</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link th:href="@{/styles/cssandjs/main.css}" rel="stylesheet" />
+</head>
+<body>
+
+<h1>Get All Product</h1>
+<form action="#" th:action="@{/products}" method="get">
+    <p><input type="submit" value="Submit"/></p>
+</form>
+
+<h1>Search Product</h1>
+<form action="#" th:action="@{/product}" th:object="${productRequest}" method="get">
+    <p>Id: <input type="text" th:field="*{id}"/></p>
+    <p>Name: <input type="text" th:field="*{name}"/></p>
+    <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
+</form>
+
+<h1>Add Product</h1>
+<form action="#" th:action="@{/product}" th:object="${productRequest}" method="post" enctype="multipart/form-data">
+    <p>Name: <input type="text" th:field="*{name}"/></p>
+    <p>Price: <input type="text" th:field="*{price}"/></p>
+    <p>Description: <input type="text" th:field="*{description}"/></p>
+    <p>Image: <input type="file" th:field="*{image}"/></p>
+    <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
+</form>
+
+<h1>Update Product</h1>
+<form action="#" th:action="@{/product}" th:object="${productRequest}" th:method="patch" enctype="multipart/form-data">
+    <p>Id: <input type="text" th:field="*{id}"/></p>
+    <p>Name: <input type="text" th:field="*{name}"/></p>
+    <p>Price: <input type="text" th:field="*{price}"/></p>
+    <p>Description: <input type="text" th:field="*{description}"/></p>
+    <p>Image: <input type="file" th:field="*{image}"/></p>
+    <p><input type="submit" value="Submit"/><input type="reset" value="Reset"/></p>
+</form>
+
+<h1>Delete Product</h1>
+<form action="#" th:action="@{/product}" th:object="${productRequest}" th:method="delete">
+    <p>Id: <input type="text" th:field="*{id}"/></p>
+    <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
+</form>
+
+</body>
+</html>

@@ -3,19 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Products operation</title>
+    <link th:href="@{/styles/cssandjs/main.css}" rel="stylesheet" />
 </head>
 <body>
-<h2>PRODUCTS OPERATED</h2>
+<h2>PRODUCTS</h2>
 <table>
     <tr>
         <td>id</td>
         <td>name</td>
         <td>price</td>
+        <td>description</td>
+        <td>image</td>
     </tr>
     <tr th:each="product : ${products}">
         <td th:text="${product.id}"></td>
         <td th:text="${product.name}"></td>
         <td th:text="${product.price}"></td>
+        <td th:text="${product.description}"></td>
+        <td>
+            <div id="ImageContainerr">
+                <img alt="sample" th:src="${product.image} == null ? _ : @{'data:image/png;base64,'+${product.image}}"
+                     class="Image"/>
+            </div>
+        </td>
     </tr>
 </table>
 </body>

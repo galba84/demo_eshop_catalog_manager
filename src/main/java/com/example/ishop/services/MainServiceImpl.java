@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MainServiceImpl implements MainService {
@@ -20,26 +22,22 @@ public class MainServiceImpl implements MainService {
     private ProductMapper productMapper;
 
     @Override
-    public List<Product> getAll() {
-        return productRepository.findAll();
+    public List<ProductDTO> getAll() {
+        List<Product> productsEntities = productRepository.findAll();
+        return productsEntities.stream().map(productMapper::mapEntityToDto).collect(Collectors.toList());
     }
 
     @Override
-    public ProductDTO add(final ProductDTO productDTO) {
-        Product product = new Product();
-        product.setName(productDTO.getName());
-        product.setPrice(productDTO.getPrice());
+    public ProductDTO add(final ProductDTO productDTO) throws IOException {
+        Product product = productMapper.mapDtoToEntity(productDTO);
         Product dbProduct = productRepository.save(product);
-        ProductDTO savedProduct = new ProductDTO();
-        savedProduct.setId(dbProduct.getId());
-        savedProduct.setName(dbProduct.getName());
-        savedProduct.setPrice(dbProduct.getPrice());
-        return savedProduct;
+        return productMapper.mapEntityToDto(dbProduct);
     }
 
     @Override
-    public Optional<Product> searchById(String id) {
-        return productRepository.findById(id);
+    public Optional<ProductDTO> searchById(String id) {
+        Optional<Product> product = productRepository.findById(id);
+        return product.map(productMapper::mapEntityToDto);
     }
 
     @Override
@@ -49,7 +47,7 @@ public class MainServiceImpl implements MainService {
     }
 
     @Override
-    public ProductDTO update(ProductDTO productDTO) throws DemoException {
+    public void update(ProductDTO productDTO) throws DemoException, IOException {
         Optional<Product> existingProduct = productRepository.findById(productDTO.getId());
         if (existingProduct.isPresent()) {
             Product product = existingProduct.get();
@@ -59,12 +57,14 @@ public class MainServiceImpl implements MainService {
             if (!productDTO.getPrice().isEmpty()) {
                 product.setPrice(productDTO.getPrice());
             }
-            Product dbProduct = productRepository.save(product);
-            ProductDTO updatedProduct = new ProductDTO();
-            updatedProduct.setId(dbProduct.getId());
-            updatedProduct.setName(dbProduct.getName());
-            updatedProduct.setPrice(dbProduct.getPrice());
-            return updatedProduct;
+            if (!productDTO.getDescription().isEmpty()) {
+                product.setDescription(productDTO.getDescription());
+            }
+            if (productDTO.getImage() != null) {
+                product.setImage(
+                        productDTO.getImage());
+            }
+            productRepository.save(product);
         } else {
             throw new DemoException(String.format("Coulnd not find a product with id %s", productDTO.getId()));
         }

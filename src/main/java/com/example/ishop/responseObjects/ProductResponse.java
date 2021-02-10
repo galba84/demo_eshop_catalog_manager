@@ -1,9 +1,10 @@
-package com.example.ishop.models;
+package com.example.ishop.responseObjects;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
-public class ProductModel {
+public class ProductResponse {
     public String getName() {
         return name;
     }
@@ -22,4 +23,6 @@ public class ProductModel {
     private String id;
     private String name;
     private String price;
+    private String description;
+    private String image;
 }

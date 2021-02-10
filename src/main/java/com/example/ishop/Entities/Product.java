@@ -2,6 +2,7 @@ package com.example.ishop.Entities;
 
 import com.mysema.query.annotations.QueryEntity;
 import lombok.Data;
+import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,6 +19,8 @@ public class Product {
 
     private String name;
     private String price;
+    private String description;
+    private Binary image;
 
     public Product() {
     }
